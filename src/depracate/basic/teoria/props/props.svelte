@@ -1,0 +1,6 @@
+<script>
+	export let answer;
+  //Default props: export let answer = 'a mystery';
+</script>
+
+<p>The answer is {answer}</p>

@@ -1,0 +1,48 @@
+{
+	"name": "my-app",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "eslint .",
+		"generate-migrations:db": "drizzle-kit generate --config=drizzle.config.ts",
+		"push:db": "drizzle-kit push --config=drizzle.config.ts",
+		"migrate:db": "tsx src/lib/server/db/migrate.ts"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-node": "^5.2.8",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/better-sqlite3": "^7.6.11",
+		"@types/eslint": "^9.6.0",
+		"autoprefixer": "^10.4.20",
+		"daisyui": "^4.12.13",
+		"drizzle-kit": "^0.26.2",
+		"eslint": "^9.0.0",
+		"eslint-plugin-svelte": "^2.36.0",
+		"globals": "^15.0.0",
+		"postcss": "^8.4.47",
+		"svelte": "^4.2.7",
+		"svelte-check": "^4.0.0",
+		"tailwindcss": "^3.4.14",
+		"tsx": "^4.19.1",
+		"typescript": "^5.0.0",
+		"typescript-eslint": "^8.0.0",
+		"vite": "^5.0.3"
+	},
+	"type": "module",
+	"dependencies": {
+		"@libsql/client": "^0.14.0",
+		"better-sqlite3": "^11.5.0",
+		"db-migrate": "^0.11.14",
+		"dotenv": "^16.4.5",
+		"drizzle-orm": "^0.35.3",
+		"marked": "^14.1.3",
+		"oslo": "^1.2.1",
+		"svelte-spa-router": "^4.0.1"
+	}
+}
