@@ -5,3 +5,9 @@ export const usersTable = sqliteTable('users', {
 	fullName: text('full_name').notNull(),
   phone: text('phone',{length: 256}).notNull()
 });
+
+export const todoTable = sqliteTable('todo', {
+  id: integer('id').primaryKey().notNull(),
+  name: text('name').notNull(),
+  desc: text('desc').notNull()
+})
