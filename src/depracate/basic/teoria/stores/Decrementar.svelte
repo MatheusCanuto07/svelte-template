@@ -6,6 +6,6 @@
 	}
 </script>
 
-<button on:click={decrement}>
+<button onclick={decrement}>
 	-
 </button>

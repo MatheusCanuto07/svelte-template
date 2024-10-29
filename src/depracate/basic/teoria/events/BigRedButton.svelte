@@ -1,4 +1,10 @@
-<button on:click>
+<script>
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+</script>
+
+<button onclick={bubble('click')}>
 	Push
 </button>
 

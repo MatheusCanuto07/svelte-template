@@ -10,6 +10,6 @@
 	}
 </script>
 
-<button on:click={sayHello}>
+<button onclick={sayHello}>
 	Click to say hello
 </button>

@@ -7,8 +7,14 @@
 		egg: '🥚'
 	};
 
-	// the name is updated whenever the prop value changes...
-	export let name;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {any} name - the name is updated whenever the prop value changes...
+	 */
+
+	/** @type {Props} */
+	let { name } = $props();
 
 	// ...but the "emoji" variable is fixed upon initialisation
 	// of the component because it uses `const` instead of `$:`

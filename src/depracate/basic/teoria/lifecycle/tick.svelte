@@ -1,7 +1,7 @@
 <script>
 	import { tick } from 'svelte';
 
-	let text = `Select some text and hit the tab key to toggle uppercase`;
+	let text = $state(`Select some text and hit the tab key to toggle uppercase`);
 
 	async function handleKeydown(event) {
 		if (event.key !== 'Tab') return;
@@ -28,7 +28,7 @@
 
 <textarea
 	value={text}
-	on:keydown={handleKeydown}
+	onkeydown={handleKeydown}
 ></textarea>
 
 <style>

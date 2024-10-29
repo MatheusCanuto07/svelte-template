@@ -3,50 +3,62 @@
   import { enhance } from "$app/forms";
   import { invalidate } from "$app/navigation";
   
-  export let data: PageData;
-  export let form: ActionData;
+  interface Props {
+    data: PageData;
+    form: ActionData;
+  }
+
+  let { data, form }: Props = $props();
   
   let {todos} = data;
-  let todoList = data.todos;
-  //Toda vez que data.todos atualizar o todoList também deve ser atualizado
-  $: todoList = data.todos;
+  let todoList = $state(data.todos);
+  //Toda vez que data.todos (dependencia do todoList) atualizar o todoList também deve ser atualizado
+  $effect(() => {
+    todoList = data.todos;
+  });
   
   //let todoEdit = todoList.find((t) => t.id == todoIdEdit);
-  //Quando alguma das variaveis que eu estou utilizando 
-  let todoEdit: typeof todoList[0] = {
+  //$: Quando alguma das variaveis que eu estou utilizando alterar a todoEdit também vai ser alterado
+  //como eu estou utilizando constantes, o $ não faz nada
+  let todoEdit: typeof todoList[0] = $state({
     id : 1,
     name : "",
     desc : ""
-  };
+  });
   
-  let updateForm : HTMLFormElement;
+  let updateForm : HTMLFormElement | undefined = $state();
   function handleUpdate(){
-    updateForm.requestSubmit();
+    //Se for undefined ele não executa nada
+    updateForm?.requestSubmit();
   }
   
-  let isLoading = false;
+  let isLoading = $state(false);
   
-  let deleteForm : HTMLFormElement;
-  let deleteId : number;
+  let deleteForm : HTMLFormElement | undefined = $state();
+  let deleteId : number | undefined = $state();
   function handleDelete(id : number) {
     deleteId = id;
     //Executa o form e não atualiza a página
-    deleteForm.requestSubmit();
+    //Se for undefined ele não executa nada
+    deleteForm?.requestSubmit();
   }
   
-  let searchTerm = "";
+  let searchTerm = $state("");
   //let filteredTodo = [];
-  let filteredTodo : typeof todoList;
-  filteredTodo = [{
+  let filteredTodo : typeof todoList = $state(
+    [{
     id : 0,
     name : "",
     desc : ""
-  }];
+  }]
+  );
   
   const searchTodo = () => {
     return filteredTodo = todoList.filter((t) => t.name.includes(searchTerm) || t.desc.includes(searchTerm) 
     || t.id == Number(searchTerm))
   }
+
+  let editModal : HTMLDialogElement | undefined = $state();
 </script>
 
 <div>
@@ -103,7 +115,7 @@
 
 <div class="mt-5 mb-1">
   <label for="search" class="mb-1">Pesquisar Tarefa</label>
-  <input class="w-full h-10 mb-1" id="search" name="search" type="text" bind:value="{searchTerm}" on:input={searchTodo}>
+  <input class="w-full h-10 mb-1" id="search" name="search" type="text" bind:value="{searchTerm}" oninput={searchTodo}>
 </div>
 
 <div class="overflow-x-auto"> 
@@ -130,12 +142,12 @@
         <th>{todo.name}</th>
         <th>{todo.desc}</th>
         <th>
-          <button class="bg-red-600 text-neutral-100 btn h-8" on:click={() => handleDelete(todo.id)}>
+          <button class="bg-red-600 text-neutral-100 btn h-8" onclick={() => handleDelete(todo.id)}>
             Apagar
           </button>
         </th>
         <th>
-          <button class="bg-yellow-400 text-neutral-100 btn h-8" on:click={() => {editModal.showModal(); todoEdit = todo}}>
+          <button class="bg-yellow-400 text-neutral-100 btn h-8" onclick={() => {editModal?.showModal(); todoEdit = todo}}>
             Editar
           </button>
         </th>
@@ -148,12 +160,12 @@
         <th>{todo.name}</th>
         <th>{todo.desc}</th>
         <th>
-          <button class="bg-red-600 text-neutral-100 btn h-8" on:click={() => handleDelete(todo.id)}>
+          <button class="bg-red-600 text-neutral-100 btn h-8" onclick={() => handleDelete(todo.id)}>
             Apagar
           </button>
         </th>
         <th>
-          <button class="bg-yellow-400 text-neutral-100 btn h-8" on:click={() => {editModal.showModal(); todoEdit = todo}}>
+          <button class="bg-yellow-400 text-neutral-100 btn h-8" onclick={() => {editModal?.showModal(); todoEdit = todo}}>
             Editar
           </button>
         </th>
@@ -165,7 +177,7 @@
 </div>
 </div>
 
-<dialog id="editModal" class="modal">
+<dialog bind:this={editModal} class="modal">
   <div class="modal-box">
     <h3 class="text-lg font-bold">Editar tarefa</h3>
     <p class="">Pressione esc ou click no botão para fechar</p>
@@ -187,7 +199,7 @@
             <button class="btn w-2-12">Close</button>
           </div>
           <div class="mt-2">
-            <button class="btn btn-success w-2-12" on:click={handleUpdate}>Enviar</button>
+            <button class="btn btn-success w-2-12" onclick={handleUpdate}>Enviar</button>
           </div>
         </div>
       </form>
@@ -215,3 +227,4 @@ use:enhance={({
   searchTerm = "";
 }}>
 </form>
+

@@ -1,10 +1,12 @@
 <script>
-	export let name;
-	export let version;
-	export let speed;
-	export let website;
+	let {
+		name,
+		version,
+		speed,
+		website
+	} = $props();
 
-	$: href = `https://www.npmjs.com/package/${name}`;
+	let href = $derived(`https://www.npmjs.com/package/${name}`);
 </script>
 
 <p>

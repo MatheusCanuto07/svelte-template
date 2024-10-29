@@ -1,5 +1,5 @@
 <script>
-	export let answer;
+	let { answer } = $props();
   //Default props: export let answer = 'a mystery';
 </script>
 

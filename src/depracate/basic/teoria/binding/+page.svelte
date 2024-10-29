@@ -1,14 +1,20 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
   import { marked } from 'marked'
   import type { PageData } from './$types';
   
-  export let data: PageData;
-  let name = 'world';
-  
-  let a = 1;
-  let b = 2;
+	interface Props {
+		data: PageData;
+	}
 
-  let yes = false;
+	let { data }: Props = $props();
+  let name = $state('world');
+  
+  let a = $state(1);
+  let b = $state(2);
+
+  let yes = $state(false);
 
   let questions = [
 		{
@@ -25,9 +31,9 @@
 		}
 	];
 
-	let selected: { id: number; text: string } | undefined;
+	let selected: { id: number; text: string } | undefined = $state();
 
-  let answer: string = '';
+  let answer: string = $state('');
 
   function handleSubmit(): void {
       if (selected) {
@@ -38,12 +44,12 @@
   }
 
 
-  let scoops = 1;
-	let flavours: any = [];
+  let scoops = $state(1);
+	let flavours: any = $state([]);
 
 	const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
-	let value = `Some words are *italic*, some are **bold**\n\n- lists\n- are\n- cool`;
+	let value = $state(`Some words are *italic*, some are **bold**\n\n- lists\n- are\n- cool`);
 </script>
 
 <!-- Como regra geral, o fluxo de dados no Svelte é de cima para baixo — um componente pai pode definir propriedades em um componente filho, e um componente pode definir atributos em um elemento, mas não o contrário. 
@@ -87,10 +93,10 @@
 
 <h2>Insecurity questions</h2>
 
-<form on:submit|preventDefault={handleSubmit}>
+<form onsubmit={preventDefault(handleSubmit)}>
 	<select
 		bind:value={selected}
-		on:change={() => (answer = '')}
+		onchange={() => (answer = '')}
 	>
 		{#each questions as question}
 			<option value={question}>

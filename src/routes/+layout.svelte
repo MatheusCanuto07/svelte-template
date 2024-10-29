@@ -4,12 +4,17 @@
   import Page from './+page.svelte';
   import "../app.css";
   
-  export let data: LayoutData;
+  interface Props {
+    data: LayoutData;
+    children?: import('svelte').Snippet;
+  }
+
+  let { data, children }: Props = $props();
 </script>
 
 <Nav></Nav>
 <div class="container-lg px-10">
-  <slot>
-    
-  </slot>
+  {#if children}
+    {@render children()}    
+  {/if}
 </div>

@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { once } from 'svelte/legacy';
+
   import type { PageData } from './$types';
   import Inner from './Inner.svelte';
 
-  let m = { x: 0, y: 0 };
+  let m = $state({ x: 0, y: 0 });
 
   //Tipo de parâmetro e tipo de retorno
 	function handleMove(event: MouseEvent): void {
@@ -14,10 +16,14 @@
 		alert(event.detail.text);
 	}
     
-  export let data: PageData;
 
   import BigRedButton from './BigRedButton.svelte';
 	import horn from './horn.mp3';
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const audio = new Audio();
 	audio.src = horn;
@@ -30,12 +36,12 @@
 
 <Inner on:message={handleMessage} />
 
-<div on:pointermove={handleMove}>
+<div onpointermove={handleMove}>
 	The pointer is at {m.x} x {m.y}
 </div>
 
 <!-- Função inline -->
-<div on:pointermove={(e) => {
+<div onpointermove={(e) => {
   m = {x: e.clientX, y : e.clientY};
 }}>
 </div>
@@ -50,7 +56,7 @@ self— somente aciona o manipulador se event.target for o próprio elemento
 trusted— somente o manipulador de gatilho event.isTrustedé true, o que significa que o evento foi disparado por uma ação do usuário e não porque algum JavaScript foi chamadoelement.dispatchEvent(...) -->
 <!-- Modificador de evento, só vai ter o alert uma vez -->
  <!-- É possível combinar vários modificadores, basta adicionar a | -->
-<button on:click|once={() => alert('clicked')}>
+<button onclick={once(() => alert('clicked'))}>
 	Click me
 </button>
 

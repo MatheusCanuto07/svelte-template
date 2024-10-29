@@ -2,26 +2,30 @@
   import type { PageData } from './$types';
   import {getRandomNumber} from './thing.svelte';
   
-  export let data: PageData;
   
-  let count = 0;
+  let count = $state(0);
   
   function increment() {
     count += 1;
   }
 
   const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
-	let selected = colors[0];
+	let selected = $state(colors[0]);
 
   import Thing from './thing.svelte';
+  interface Props {
+    data: PageData;
+  }
 
-	let things = [
+  let { data }: Props = $props();
+
+	let things = $state([
 		{ id: 1, name: 'apple' },
 		{ id: 2, name: 'banana' },
 		{ id: 3, name: 'carrot' },
 		{ id: 4, name: 'doughnut' },
 		{ id: 5, name: 'egg' }
-	];
+	]);
 
 	function handleClick() {
 		things = things.slice(1);
@@ -30,12 +34,12 @@
 	function handleClick2() {
     promise = getRandomNumber();
 	}
-  let promise = getRandomNumber();
+  let promise = $state(getRandomNumber());
 
 </script>
 
 <div>
-  <button on:click={increment}>
+  <button onclick={increment}>
     Clicked {count}
     {count === 1 ? 'time' : 'times'}
   </button>
@@ -54,11 +58,11 @@
 			aria-current={selected === color}
 			aria-label={color}
 			style="background: {color}"
-			on:click={() => selected = color}
+			onclick={() => selected = color}
 		>{i + 1}</button>
 	{/each}
 
-  <button on:click={handleClick}>
+  <button onclick={handleClick}>
     Remove first thing
   </button>
   
@@ -66,7 +70,7 @@
     <Thing name={thing.name} />
   {/each}
 
-  <button on:click={handleClick2}>
+  <button onclick={handleClick2}>
     generate random number
   </button>
   

@@ -1,15 +1,19 @@
 <script lang="ts">
-  let count = 0;
+  import { run } from 'svelte/legacy';
+
+  let count = $state(0);
   //Variáveis dinâmicas
-  $: doubled = count * 2;
+  let doubled = $derived(count * 2);
 
   //Funções dinâmicas
-  $: if (count >= 10) {
-		alert('count is dangerously high!');
-		count = 0;
-	}
+  run(() => {
+    if (count >= 10) {
+  		alert('count is dangerously high!');
+  		count = 0;
+  	}
+  });
 
-  let numbers = [1, 2, 3, 4];
+  let numbers = $state([1, 2, 3, 4]);
 
 	function addNumber() {
 		numbers = [...numbers, numbers.length + 1];
@@ -21,12 +25,12 @@
 </script>
 
 <div>
-  <button on:click={increment}>
+  <button onclick={increment}>
     Clicked {count}
     {count === 1 ? 'time' : 'times'}
   </button>
 
-  <button on:click={addNumber}>
+  <button onclick={addNumber}>
     Adicionar item array
   </button>
 
