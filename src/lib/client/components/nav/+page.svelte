@@ -1,3 +1,8 @@
+<script lang="ts">
+  import {page} from '$app/stores';
+  const userData = $page.data.user;
+</script>
+
 <div class="navbar bg-base-100">
   <div class="drawer">
     <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
@@ -58,7 +63,18 @@
       </ul>
     </div>
   </div>
-  <div class="">
+  <div class="flex gap-5">
+    {#if userData !== null}
+			<form method="post" action="/logout">
+        <p>Logado como : {userData.name}</p>
+				<button type="submit" class="text-lg text-blue-800">
+					<p class="text-primary-500">Sair</p>
+				</button>
+			</form>
+		{:else}
+			<a href="/login" class="text-lg text-blue-800">Login</a>
+      <a href="/signup" class="text-lg text-blue-800"><p> Criar conta</p></a>
+		{/if}
     <a href="https://svelte.dev/">
       <img class="h-10" src="svelteLogo.png" alt="">
     </a>

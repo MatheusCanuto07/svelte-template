@@ -56,4 +56,6 @@ export type UserInsertSchema = typeof userTable.$inferInsert;
 // db:studio: "drizzle-kit studio"
 // Esse comando abre uma interface gráfica para o banco de dados, permitindo visualizar e editar tabelas, registros e estrutura diretamente por meio de um ambiente interativo.
 
-// Exemplo de como executar: npm run db:generate
+// Exemplo de como executar: 
+// Gera um novo sql: pnpm drizzle-kit generate
+// Executa esse novo sql e cria um novo banco: pnpm drizzle-kit push

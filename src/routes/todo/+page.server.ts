@@ -56,12 +56,10 @@ export const actions = {
     const formData = await event.request.formData();
     // O método formData.get() sempre retorna um FormDataEntryValue, que é do tipo string ou File, então para garantir que id seja um Number, basta usar Number() ou parseInt().
     const id = formData.get("idTask");
-    
-    console.log(formData);
+
     try{
       const resp = 
       await todoQueries.deleteTODO(id);
-      console.log(resp)
       return {
         succes: true,
         message: "Apagou"

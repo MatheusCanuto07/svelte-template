@@ -6,7 +6,7 @@ type userModel = typeof userTable.$inferSelect;
 type userInsert = typeof userTable.$inferInsert;
 
 function getUserByEmail(userEmail : userModel["email"]) {
-  return db.select().from(userTable).where(eq(userTable.email, userEmail));
+  return db.select().from(userTable).where(eq(userTable.email, userEmail)).limit(1);
 }
 
 function insertUser(user : userInsert){
