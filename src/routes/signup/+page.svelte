@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { enhance } from "$app/forms";
+  import RegistroForm from "$lib/client/components/registro/RegistroForm.svelte";
   
   export let data: PageData;
 </script>
 
-<h1>Sign up</h1>
+<!-- <h1>Sign up</h1>
 <form method="post" use:enhance>
 	<label for="username">Username</label>
 	<input type="text" name="username" id="username"/>
@@ -19,4 +20,6 @@
 	<input type="password" name="password" id="password" /><br />
   
 	<input type="submit" />
-</form>
+</form> -->
+
+<RegistroForm />

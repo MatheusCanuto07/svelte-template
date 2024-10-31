@@ -3,6 +3,12 @@ import type { Handle } from '@sveltejs/kit';
 import { deleteSessionCookie } from '$lib/server/authUtils';
 import { lucia } from '$lib/server/lucia';
 
+// Verificar se o usuário está autenticado em cada requisição.
+// Iniciar ou validar sessões de usuário.
+// Configurar informações globais de usuário ou permissões de acesso para toda a aplicação.
+
+//  O handle() hook é uma função especial em SvelteKit que permite interceptar todas as requisições do servidor antes que elas sejam processadas
+
 export const handle: Handle = async ({ event, resolve }) => {
 	// Retrieve the session ID from the browser's cookies
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
@@ -40,9 +46,3 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return resolve(event);
 };
-
-// Verificar se o usuário está autenticado em cada requisição.
-// Iniciar ou validar sessões de usuário.
-// Configurar informações globais de usuário ou permissões de acesso para toda a aplicação.
-
-//  O handle() hook é uma função especial em SvelteKit que permite interceptar todas as requisições do servidor antes que elas sejam processadas

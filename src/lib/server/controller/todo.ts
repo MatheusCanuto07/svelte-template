@@ -17,6 +17,10 @@ function obterTodoId(id: todoSelect["id"]) {
   return db.select().from(todoTable).where(eq(todoTable.id, id));
 }
 
+// function obterTodoWithLimit(limit: number, offset: number){
+//   return db.select 
+// }
+
 function inserirTODO(todo: todoModel) {
   return db.insert(todoTable).values(todo);
 }
