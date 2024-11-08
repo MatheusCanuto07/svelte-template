@@ -1,6 +1,7 @@
 <script lang="ts">
   import {page} from '$app/stores';
   const userData = $page.data.user;
+  console.log(userData);
 </script>
 
 <div class="navbar bg-base-100 flex {userData == null ? 'justify-end' : ''}">

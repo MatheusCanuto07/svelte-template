@@ -2,12 +2,13 @@
   import type { PageData, ActionData } from "./$types";
   import { enhance } from "$app/forms";
   import { invalidate } from "$app/navigation";
+  import { filters } from "./params.svelte";
   
   interface Props {
     data: PageData;
     form: ActionData;
   }
-
+  
   let { data, form }: Props = $props();
   
   let {todos} = data;
@@ -46,7 +47,7 @@
   let searchTerm = $state("");
   //let filteredTodo = [];
   let filteredTodo : typeof todoList = $state(
-    [{
+  [{
     id : 0,
     name : "",
     desc : ""
@@ -57,7 +58,12 @@
     return filteredTodo = todoList.filter((t) => t.name.includes(searchTerm) || t.desc.includes(searchTerm) 
     || t.id == Number(searchTerm))
   }
+  
+  let page = $state(1);
+  let pageSize = $state(5);
 
+  let full = [1,2,3,4]
+  
   let editModal : HTMLDialogElement | undefined = $state();
 </script>
 
@@ -174,6 +180,18 @@
       {/if}
     </tbody>
   </table>
+
+  <div class="flex justify-center items-center">
+    <div class="join">
+      <button onclick="{() => filters.update({page : (page + 1).toString()})}" class="join-item btn">«</button>
+      <input class="join-item btn" type="number" name="page" id="page" value="{page}">
+      <button class="join-item btn">»</button>
+    </div>
+    <div>
+      <input class="input input-bordered w-12" type="number" name="pageSize" id="pageSize" value="{pageSize}">
+    </div>
+  </div>
+
 </div>
 </div>
 

@@ -2,10 +2,14 @@ import type { PageServerLoad, Actions } from "./$types";
 import { todoQueries } from "$lib/server/controller/todo";
 import { fail } from "@sveltejs/kit";
 
-export const load = (async ({ depends }) => {
+export const load = (async ({ depends, url }) => {
   //Se algo relacionado a essa dependência mudar (como um dado associado a "todos"), a função load será reexecutada
   depends("todoList");
-  const todos = await todoQueries.listarTODO();
+  const searchParams = url.searchParams;
+  const page = parseInt(searchParams.get("page")|| "1") 
+  const pageSize = parseInt(searchParams.get("pageSize")|| "5") 
+
+  const todos = await todoQueries.obterTodoWithLimit(page, pageSize);
 
   return {
     todos,

@@ -4,8 +4,8 @@ import { fail } from "@sveltejs/kit";
 
 export const load = (async ({ depends }) => {
   //Se algo relacionado a essa dependência mudar (como um dado associado a "todos"), a função load será reexecutada
-  depends("todoList2");
-  const todos = await todoQueries.listarTODO();
+  depends("pagination");
+  const todos = await todoQueries.obterTodoWithLimit(1,5);
 
   return {
     todos,
@@ -52,47 +52,4 @@ export const actions = {
       });
     }
   },
-  delete: async(event) => {
-    const formData = await event.request.formData();
-    // O método formData.get() sempre retorna um FormDataEntryValue, que é do tipo string ou File, então para garantir que id seja um Number, basta usar Number() ou parseInt().
-    const id = formData.get("idTask");
-    
-    console.log(formData);
-    try{
-      const resp = 
-      await todoQueries.deleteTODO(id);
-      console.log(resp)
-      return {
-        succes: true,
-        message: "Apagou"
-      }
-    } catch (e: any){
-      return fail(404, {
-        succes: false,
-        message: e.message ?? "Unknow error",
-      });
-    }
-  },
-  update: async(event) => {
-    const formData = await event.request.formData();
-
-    const newName = formData.get("nameEdit");
-    const newDesc = formData.get("descEdit");
-    const idNewTask = formData.get("idEdit")
-
-    try{
-      console.log(idNewTask)
-      console.log(newName)
-      console.log(newDesc)
-      console.log( await todoQueries.updateTodo(idNewTask, {
-        name : newName,
-        desc : newDesc
-      })
-    );
-      
-    }
-    catch(e){
-      console.error(e, 404)
-    }
-  }
 } satisfies Actions;

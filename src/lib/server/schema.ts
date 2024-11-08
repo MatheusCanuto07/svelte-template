@@ -7,9 +7,9 @@ export const todoTable = sqliteTable('todo', {
   desc: text('desc').notNull()
 })
 
-export const userTable = sqliteTable("user", {
+export const userTable = sqliteTable("userTable", {
   // Requisito do lucia
-	id: text("id").primaryKey(),
+	id: integer("id").primaryKey(),
 	// other user attributes
   name: text('name').notNull(),
 	email: text('email').notNull().unique(),
@@ -17,26 +17,20 @@ export const userTable = sqliteTable("user", {
 	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
 });
 
-export const session = sqliteTable("user_session", {
+export const sessionTable = sqliteTable("sessionTable", {
 	id: text("id").primaryKey().notNull(),
 
-	userId: text("user_id")
-		.notNull()
+	userId: integer("session_user_id")
 		.references(() => userTable.id),
 
-	expiresAt: integer("expiresAt").notNull(),
-});
-
-export const key = sqliteTable("user_key", {
-	id: text("id").primaryKey(),
-	userId: text("user_id")
-		.notNull()
-		.references(() => userTable.id),
-	hashedPassword: text("hashed_password")
+	expiresAt: integer("expiresAt", {mode: "timestamp"}).notNull(),
 });
 
 export type Todo = typeof todoTable.$inferSelect 
 export type UserInsertSchema = typeof userTable.$inferInsert;
+
+export type User = typeof userTable.$inferSelect;
+export type Session = typeof sessionTable.$inferSelect;
 
 // db:generate: "drizzle-kit generate:sqlite"
 // Esse comando gera o código SQL ou o esquema do banco de dados com base nas definições do projeto. Ele lê a estrutura configurada e cria os arquivos necessários para inicializar o banco de dados.
@@ -57,5 +51,5 @@ export type UserInsertSchema = typeof userTable.$inferInsert;
 // Esse comando abre uma interface gráfica para o banco de dados, permitindo visualizar e editar tabelas, registros e estrutura diretamente por meio de um ambiente interativo.
 
 // Exemplo de como executar: 
-// Gera um novo sql: pnpm drizzle-kit generate
+// Gera um novo código sql: pnpm drizzle-kit generate
 // Executa esse novo sql e cria um novo banco: pnpm drizzle-kit push

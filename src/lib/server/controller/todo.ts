@@ -1,6 +1,6 @@
 import { db } from "$lib/server/db";
 import { todoTable } from "$lib/server/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 //typeof: Captura o tipo do objeto todoTable.
 //.inferInsert: Esse método gera automaticamente o tipo necessário para criar ou inserir novos registros. Ou seja, ele infere quais campos são obrigatórios e opcionais para inserir um novo item na tabela todoTable.
 type todoModel = typeof todoTable.$inferInsert;
@@ -17,9 +17,12 @@ function obterTodoId(id: todoSelect["id"]) {
   return db.select().from(todoTable).where(eq(todoTable.id, id));
 }
 
-// function obterTodoWithLimit(limit: number, offset: number){
-//   return db.select 
-// }
+function obterTodoWithLimit(page: number, pageSize: number){
+  //page = 1 pageSize = 5 -> items = 5 e vai pular 0
+  //page = 2 pageSize = 5 -> items = 5 e vai pular 5
+  //page = 3 pageSize = 5 -> items = 5 e vai pular 10
+  return db.select().from(todoTable).orderBy(asc(todoTable.id)).limit(pageSize).offset((page - 1) * pageSize);
+}
 
 function inserirTODO(todo: todoModel) {
   return db.insert(todoTable).values(todo);
@@ -43,4 +46,5 @@ export const todoQueries = {
   obterTodoId,
   deleteTODO,
   updateTodo,
+  obterTodoWithLimit
 };

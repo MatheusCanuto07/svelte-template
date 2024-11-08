@@ -1,7 +1,6 @@
-import type { Handle } from '@sveltejs/kit';
-
-import { deleteSessionCookie } from '$lib/server/authUtils';
-import { lucia } from '$lib/server/lucia';
+import { redirect, type Handle } from '@sveltejs/kit';
+import { generateSessionToken, validateSessionToken } from '$lib/server/lucia';
+import { deleteSessionTokenCookie, setSessionTokenCookie } from '$lib/server/session';
 
 // Verificar se o usuário está autenticado em cada requisição.
 // Iniciar ou validar sessões de usuário.
@@ -9,40 +8,33 @@ import { lucia } from '$lib/server/lucia';
 
 //  O handle() hook é uma função especial em SvelteKit que permite interceptar todas as requisições do servidor antes que elas sejam processadas
 
-export const handle: Handle = async ({ event, resolve }) => {
-	// Retrieve the session ID from the browser's cookies
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
+const allowRoutes = [
+  "/login",
+  "/signup",
+  "/todo2"
+]
 
-	// If there's no session ID, set both user and session to null and resolve the request
-	if (!sessionId) {
+export const handle: Handle = async ({ event, resolve }) => {
+  const token = event.cookies.get("session");
+	if (!token) {
 		event.locals.user = null;
 		event.locals.session = null;
+
+    if(!allowRoutes.includes(event.url.pathname)){
+      redirect(307, "/login");
+    }
+
 		return resolve(event);
 	}
 
-	// Attempt to validate the session using the retrieved session ID
-	const { session, user } = await lucia.validateSession(sessionId);
+	const { session, user } = await validateSessionToken(token);
+	if (session !== null) {
+		setSessionTokenCookie(event, token, session.expiresAt);
+	} else {
+		deleteSessionTokenCookie(event);
+	} 
 
-	// If the session is newly created (due to session expiration extension), generate a new session cookie
-	if (session?.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-
-		// Set the new session cookie in the browser
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-	}
-
-	// If the session is invalid, generate a blank session cookie to remove the existing session cookie from the browser
-	if (!session){
-		await deleteSessionCookie(lucia, event.cookies);
-  } 
-	
-
-	// Persist the user and session information in the event locals for use within endpoint handlers and page components
-	event.locals.user = user;
 	event.locals.session = session;
-
+	event.locals.user = user;
 	return resolve(event);
 };

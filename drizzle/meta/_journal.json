@@ -15,6 +15,41 @@
       "when": 1730220295385,
       "tag": "0001_silly_starjammers",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1730463800870,
+      "tag": "0002_lean_ozymandias",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1730463902199,
+      "tag": "0003_daffy_matthew_murdock",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1730464013605,
+      "tag": "0004_pink_marten_broadcloak",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1730464073764,
+      "tag": "0005_rich_madame_masque",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1730464136507,
+      "tag": "0006_gigantic_micromax",
+      "breakpoints": true
     }
   ]
 }
