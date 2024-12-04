@@ -32,7 +32,6 @@
   //Quando alguma das dependencias de filteredTodos atualizar o valor dela também vai ser atualizado
   let filteredTodos = $derived(data.todos.filter(filterTodos));
   
-  //TODO: Olhar pq essa desgraça não está funcionando
   function filterTodos(t: Todo){
     if(search){
       return t.name.includes(search) || t.desc.includes(search) || t.id == Number(search)
@@ -46,6 +45,8 @@
     console.log(searchParams)
     filters.update({search : search})
   }
+
+  $inspect(pagination.itemsPerPage, pagination.page);
 </script>
 
 <div class="w-full">
@@ -54,4 +55,4 @@
 
 <TodoCreate />
 
-<TodoList todos={filteredTodos} pagination />
+<TodoList todos={filteredTodos} bind:pagination={pagination} />

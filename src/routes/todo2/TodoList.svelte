@@ -4,12 +4,13 @@
   import type {Todo} from '$lib/server/schema';
   import TodoUpdate from './TodoUpdate.svelte';
   import type {Pagination} from './+page.svelte';
+  import {filters} from './params.svelte';
   interface Props {
     todos: Todo[],
     pagination: Pagination
   }
-
-  let {todos, pagination} : Props = $props();
+  
+  let {todos, pagination = $bindable()} : Props = $props();
   let todoUpdate : Todo = $state(
     {
       id : 1,
@@ -23,10 +24,11 @@
   function handleModal(){
     if(todoDialog !== null)
       todoDialog.activeModal();
+
+    //fetch('/api', {method: ""})
   }
 
   let isLoading = false;
-
 
 </script>
 
@@ -82,14 +84,14 @@
     <div class="flex justify-end">
       <div class="flex ">
         <p>Página</p>
-        <input type="number" value="{pagination.page}" class="w-7 ms-2">
+        <button type="button" onclick="{() => pagination.page + 1}">+</button>
+        <input type="number" bind:value="{pagination.page}" class="w-7 ms-2">
+        <button onclick="{() => pagination.page - 1}">-</button>
       </div>
       <div class="flex">
         <p class="ms-2">Itens por página</p>
-        <input type="number" value="{pagination.itemsPerPage}" class="w-7 ms-2">
+        <input type="number" bind:value="{pagination.itemsPerPage}" class="w-7 ms-2">
       </div>
     </div>
   </form>
 </div>
-
-<TodoUpdate bind:this="{todoDialog}" todo={todoUpdate}/>
